@@ -2,6 +2,11 @@
 npx create-next-app saas --ts --eslint --tailwind --no-src-dir --no-app
 
 npm install react-markdown remark-gfm remark-breaks
+
+npm install @clerk/nextjs@6.39.0 @microsoft/fetch-event-source
+
+npm install react-datepicker
+npm install --save-dev @types/react-datepicker
 #--- run
 
 cd week1
@@ -25,3 +30,8 @@ npm run dev
 
 vercel login
 vercel --prod
+
+-- push env to vercel
+vercel env add NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+vercel env add CLERK_SECRET_KEY
+vercel env add CLERK_JWKS_URL

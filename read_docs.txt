@@ -28,4 +28,49 @@ Cách truyền thống: Bạn phải mua VPS, tự cài đặt hệ điều hàn
 
 Với Vercel: Bạn chỉ cần tập trung vào việc viết code. Vercel lo toàn bộ phần hạ tầng, quản lý server và scaling (tự động mở rộng khi có nhiều người truy cập).
 
-#---
+#--- clerk
+1. Clerk làm gì cho bạn?
+Quản lý người dùng (User Management): Thay vì tạo bảng Users trong database và tự quản lý username, password, email, Clerk làm hết. Bạn chỉ cần gọi API của Clerk để hỏi: "Người đang dùng app của tôi là ai?".
+
+Đăng nhập đa phương thức (Multi-provider Auth): Chỉ với vài dòng code, bạn có ngay nút "Đăng nhập bằng Google", "GitHub", "Facebook" hoặc thậm chí là "Đăng nhập bằng mã OTP qua Email/SMS".
+
+Trải nghiệm người dùng (Ready-made UI): Clerk cung cấp sẵn các khung cửa sổ (Modal) đăng nhập cực đẹp, hỗ trợ tiếng Việt, quên mật khẩu, cập nhật hồ sơ cá nhân... Bạn không cần thiết kế một giao diện đăng nhập nào.
+
+Bảo mật cấp doanh nghiệp: Clerk tự xử lý các vấn đề nhức nhối như chống tấn công brute-force, quản lý session (phiên làm việc), token hết hạn, và tuân thủ các tiêu chuẩn bảo mật quốc tế.
+
+2. Luồng hoạt động (Cách ứng dụng của bạn giao tiếp với Clerk)
+Khi người dùng truy cập vào app của bạn:
+
+Người dùng đăng nhập: Trình duyệt gọi đến Clerk để xác thực. Nếu thành công, Clerk gửi trả về một Session Token (chìa khóa tạm thời).
+
+Frontend lưu giữ: App của bạn (Next.js) nhận "chìa khóa" đó và lưu lại.
+
+Gửi yêu cầu tới Backend (Python/FastAPI): Khi bạn cần gọi API lấy ý tưởng (/api-be), bạn gửi kèm cái "chìa khóa" (JWT Token) đó vào Header của request.
+
+Backend kiểm tra: Python của bạn nhận request, cầm "chìa khóa" đó đưa lên Clerk (thông qua URL JWKS) để kiểm tra xem: "Chìa khóa này có thật không? Người này là ai?".
+
+Cấp quyền: Nếu Clerk xác nhận "OK", Backend của bạn mới trả về dữ liệu.
+
+3. Tại sao chọn Clerk thay vì tự viết?
+Tiết kiệm hàng trăm giờ code: Nếu tự viết hệ thống bảo mật, bạn sẽ mất vài tuần để làm chuẩn. Với Clerk, bạn chỉ mất 30 phút cài đặt.
+
+Giảm thiểu lỗi bảo mật: "Đừng tự chế hệ thống mật khẩu của riêng bạn" (Don't roll your own crypto) là nguyên tắc vàng trong lập trình. Để chuyên gia như Clerk làm sẽ an toàn hơn nhiều.
+
+Tính mở rộng: Khi ứng dụng bạn có 10 người hay 1 triệu người dùng, Clerk vẫn chạy tốt mà không cần bạn phải nâng cấp server chỉ để quản lý user.
+
+
+1. Gói miễn phí (Free Tier) - Dành cho cá nhân và startup nhỏ
+Đây là gói bạn đang dùng:
+
+Số lượng người dùng: Miễn phí lên tới 10,000 người dùng hoạt động hàng tháng (Monthly Active Users - MAU).
+
+Tính năng: Bao gồm hầu hết các tính năng quan trọng: Đăng nhập Google, GitHub, Email, giao diện đăng nhập đẹp, quản lý hồ sơ người dùng.
+
+Thời gian: Bạn có thể dùng gói này vĩnh viễn cho tới khi ứng dụng của bạn vượt quá 10,000 người dùng mỗi tháng.
+
+2. Khi nào thì bạn mới phải trả tiền?
+Bạn chỉ cần cân nhắc nâng cấp lên gói trả phí (Pro) khi:
+
+Vượt quá 10,000 MAU: Khi ứng dụng của bạn đã có 10,000 người đăng nhập vào mỗi tháng, lúc đó bạn đã có doanh thu để chi trả cho Clerk rồi.
+
+Các tính năng nâng cao (Enterprise): Bạn cần các tính năng bảo mật chuyên sâu như SAML, Enterprise SSO, hoặc muốn xóa logo "Powered by Clerk" khỏi giao diện đăng nhập (tùy gói).
