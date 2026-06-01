@@ -7,7 +7,7 @@ Welcome to Week 2! This week, you'll build and deploy your own AI Digital Twin -
 Today, we'll start by building a local version that showcases a fundamental challenge in AI applications: the importance of conversation memory.
 
 ## What You'll Learn Today
-
+ 
 - **Next.js App Router** vs Pages Router architecture
 - **Building a chat interface** with React and Tailwind CSS
 - **Creating a FastAPI backend** for AI conversations

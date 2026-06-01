@@ -1,0 +1,33 @@
+#--- docs
+
+#--- install
+npx create-next-app@latest frontend --typescript --tailwind --app --no-src-dir
+
+curl -LsSf https://astral.sh/uv/install.sh | sh
+uv --version
+
+#--- run
+
+--
+cd week2
+cd proj_1/twin
+
+cd backend
+
+cd frontend
+npm install lucide-react
+
+-- BE
+cd backend
+uv init --bare
+uv python pin 3.12
+uv add -r requirements.txt
+uv run uvicorn server:app --reload
+
+-- FE
+cd frontend
+npm run dev
+
+#--- git
+
+#---

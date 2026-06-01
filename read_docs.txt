@@ -74,3 +74,15 @@ Bạn chỉ cần cân nhắc nâng cấp lên gói trả phí (Pro) khi:
 Vượt quá 10,000 MAU: Khi ứng dụng của bạn đã có 10,000 người đăng nhập vào mỗi tháng, lúc đó bạn đã có doanh thu để chi trả cho Clerk rồi.
 
 Các tính năng nâng cao (Enterprise): Bạn cần các tính năng bảo mật chuyên sâu như SAML, Enterprise SSO, hoặc muốn xóa logo "Powered by Clerk" khỏi giao diện đăng nhập (tùy gói).
+
+#--- lucide-react
+lucide-react là một thư viện biểu tượng (icons) dạng SVG cực kỳ phổ biến trong cộng đồng phát triển web, đặc biệt là khi dùng với React hoặc Next.js.
+
+Tác dụng chính của lucide-react:
+Cung cấp hàng ngàn biểu tượng hiện đại: Thay vì phải tải ảnh .png hay .jpg làm nặng web, lucide-react cung cấp các biểu tượng dưới dạng SVG (vector). Điều này giúp biểu tượng luôn sắc nét dù bạn phóng to hay thu nhỏ, và dung lượng file cực kỳ nhẹ.
+
+Dễ dàng tùy chỉnh bằng CSS: Vì là SVG, bạn có thể thay đổi màu sắc, kích thước, độ dày nét vẽ (stroke width) trực tiếp bằng class Tailwind CSS hoặc thuộc tính style.
+
+Phong cách đồng nhất: Tất cả các biểu tượng trong thư viện đều được thiết kế theo một phong cách thống nhất, giúp giao diện website của bạn trông chuyên nghiệp và "sạch" hơn.
+
+Tích hợp hoàn hảo với React: Bạn chỉ cần import biểu tượng như một React Component bình thường.
