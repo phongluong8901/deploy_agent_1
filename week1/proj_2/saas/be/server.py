@@ -1,11 +1,25 @@
 import os
+from pathlib import Path
 from fastapi import FastAPI, Depends
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from fastapi_clerk_auth import ClerkConfig, ClerkHTTPBearer, HTTPAuthorizationCredentials
 from google import genai # Import thư viện chính của Google
 
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Clerk authentication setup
 clerk_config = ClerkConfig(jwks_url=os.getenv("CLERK_JWKS_URL"))
 clerk_guard = ClerkHTTPBearer(clerk_config)
 
@@ -30,7 +44,7 @@ Date of Visit: {visit.date_of_visit}
 Notes:
 {visit.notes}"""
 
-@app.post("/api-be")
+@app.post("/api-be/consultation")
 def consultation_summary(
     visit: Visit,
     creds: HTTPAuthorizationCredentials = Depends(clerk_guard),
@@ -39,7 +53,7 @@ def consultation_summary(
     
     # Khởi tạo client Gemini
     client = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
-
+    
     full_prompt = f"{system_prompt}\n\n{user_prompt_for(visit)}"
 
     # Gọi Gemini với streaming
@@ -51,7 +65,19 @@ def consultation_summary(
     def event_stream():
         for chunk in response:
             if chunk.text:
-                # Format SSE chuẩn
+                # Trả về text dạng SSE chuẩn
                 yield f"data: {chunk.text.replace(chr(10), ' ')}\n\n"
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
+
+# Serve static files
+static_path = Path("static")
+if static_path.exists():
+    @app.get("/")
+    async def serve_root():
+        return FileResponse(static_path / "index.html")
+    app.mount("/", StaticFiles(directory="static", html=True), name="static")
