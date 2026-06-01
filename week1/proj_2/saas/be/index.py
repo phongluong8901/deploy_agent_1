@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 from google import genai
 import os
 from dotenv import load_dotenv
@@ -17,14 +18,24 @@ app.add_middleware(
 
 @app.get("/api-be")
 def idea():
-    try:
-        # Lưu ý: Đảm bảo GOOGLE_API_KEY đã được thêm vào Vercel Settings -> Environment Variables
-        client = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
-        
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents="Come up with a new business idea for AI Agents",
-        )
-        return response.text
-    except Exception as e:
-        return f"Error: {str(e)}"
+    # Khởi tạo client
+    client = genai.Client(api_key=os.environ.get("GOOGLE_API_KEY"))
+    
+    def event_stream():
+        try:
+            # Tạo stream trực tiếp trong generator
+            # Đảm bảo lệnh này nằm bên trong generator để mỗi khi có request mới 
+            # nó tạo ra một kết nối mới hoàn toàn
+            response = client.models.generate_content_stream(
+                model="gemini-2.5-flash",
+                contents="Come up with a new business idea for AI Agents",
+            )
+            
+            for chunk in response:
+                if chunk.text:
+                    yield f"data: {chunk.text}\n\n"
+                    
+        except Exception as e:
+            yield f"data: \n\n**Lỗi hệ thống:** {str(e)}"
+            
+    return StreamingResponse(event_stream(), media_type="text/event-stream")

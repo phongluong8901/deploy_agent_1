@@ -1,6 +1,7 @@
 #--- install
 npx create-next-app saas --ts --eslint --tailwind --no-src-dir --no-app
 
+npm install react-markdown remark-gfm remark-breaks
 #--- run
 
 cd week1

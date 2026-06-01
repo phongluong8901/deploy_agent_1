@@ -1,38 +1,45 @@
 "use client"
 
 import { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
 
 export default function Home() {
-  const [idea, setIdea] = useState<string>('Đang chờ lấy ý tưởng từ Gemini...');
+  const [idea, setIdea] = useState<string>('Đang kết nối tới Gemini...');
 
   useEffect(() => {
-    // local
-    // fetch('http://127.0.0.1:8000/api-be')
+    // const eventSource = new EventSource('http://127.0.0.1:8000/api-be');
+    const eventSource = new EventSource('/api-be');
+    let buffer = "";
 
-    // cloud vercel
-    fetch('/api-be')
-      .then(async (res) => {
-        // Lấy nội dung phản hồi
-        const text = await res.text();
+    eventSource.onmessage = (event) => {
+      buffer += event.data;
+      setIdea(buffer);
+    };
 
-        // Kiểm tra xem phản hồi có phải là lỗi 429 không
-        if (text.includes("429")) {
-          throw new Error('Đã hết lượt miễn phí trong hôm nay. Vui lòng quay lại vào ngày mai!');
-        }
+    eventSource.onerror = () => {
+      // Nếu có lỗi, thông báo cho người dùng thay vì chỉ đóng kết nối im lặng
+      if (buffer === 'Đang kết nối tới Gemini...') {
+        setIdea('❌ Lỗi: Không thể kết nối tới server. Vui lòng kiểm tra lại API Key hoặc mạng.');
+      }
+      eventSource.close();
+    };
 
-        if (!res.ok) throw new Error('Không lấy được data');
-        return text;
-      })
-      .then((data) => setIdea(data))
-      .catch((err) => setIdea('Lỗi rồi: ' + err.message));
+    return () => eventSource.close();
   }, []);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-8">
-      <div className="bg-white p-10 rounded-2xl shadow-lg max-w-xl w-full text-center">
-        <h1 className="text-2xl font-bold mb-6">Business Idea Generator</h1>
-        <div className="p-4 bg-gray-50 rounded-lg text-left whitespace-pre-wrap text-gray-700">
-          {idea}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100 flex items-center justify-center p-6">
+      <div className="bg-white/80 backdrop-blur-xl border border-white/50 shadow-2xl rounded-3xl p-8 max-w-2xl w-full">
+        <h1 className="text-3xl font-extrabold mb-8 text-center bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
+          Business Idea Generator
+        </h1>
+
+        <div className="markdown-content p-6 bg-white/50 rounded-2xl text-left text-gray-800 leading-relaxed min-h-[200px] border border-gray-100 shadow-inner">
+          <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
+            {idea}
+          </ReactMarkdown>
         </div>
       </div>
     </div>
