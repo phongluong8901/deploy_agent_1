@@ -46,9 +46,9 @@ git branch
 git push origin -u 01/06/2026
 
 
-#--- console vercel
-https://vercel.com/phongluong8901s-projects/proj-1/5oxiBAtsc33TavxcA1LZngT9JeHu
+#--- link tech
+https://vercel.com/phongluong8901s-projects
 
-#--- link
+https://dashboard.clerk.com/apps
 
-https://proj-1-ro7mbqin1-phongluong8901s-projects.vercel.app
+
