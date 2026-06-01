@@ -33,6 +33,14 @@ vercel .
 vercel --force
 
 #--- git
+git remote remove origin
+git remote -v
+
+git remote add origin https://github.com/phongluong8901/deploy_agent_1.git
+git branch -M main
+
+git push -u origin main
+
 git checkout b 01/06/2026
 git branch
 git push origin -u 01/06/2026
