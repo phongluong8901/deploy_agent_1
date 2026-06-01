@@ -27,3 +27,8 @@ npm run dev
 
 vercel login
 vercel --prod
+
+-- push env to vercel
+vercel env add NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+vercel env add CLERK_SECRET_KEY
+vercel env add CLERK_JWKS_URL
