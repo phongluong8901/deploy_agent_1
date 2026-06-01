@@ -1,0 +1,31 @@
+#--- vercel
+Vercel là một nền tảng Cloud (đám mây) chuyên biệt dành cho các nhà phát triển để triển khai (deploy) các ứng dụng web một cách nhanh chóng và tối ưu nhất.
+
+Trong lĩnh vực lập trình web hiện nay, Vercel được coi là lựa chọn hàng đầu, đặc biệt là với các dự án sử dụng React, Next.js và các framework hiện đại khác.
+
+Vai trò chính của Vercel trong quy trình Deploy
+Khi bạn muốn đưa một website lên mạng để người dùng có thể truy cập, Vercel đóng vai trò là nơi lưu trữ và chạy mã nguồn của bạn:
+
+Tự động hóa hoàn toàn (Continuous Deployment): Bạn chỉ cần kết nối Vercel với kho lưu trữ mã nguồn (như GitHub, GitLab, Bitbucket). Mỗi khi bạn đẩy (push) code mới lên, Vercel sẽ tự động phát hiện, xây dựng (build) và cập nhật phiên bản mới nhất lên server.
+
+Tối ưu hóa hiệu năng (Edge Network): Vercel sử dụng hạ tầng mạng phân tán toàn cầu (Edge Network). Khi người dùng truy cập trang web của bạn, Vercel sẽ tự động điều hướng họ đến máy chủ gần nhất, giúp tốc độ tải trang cực nhanh.
+
+Hỗ trợ Serverless Functions: Bạn có thể viết các đoạn mã backend (API) trực tiếp trong dự án của mình mà không cần phải cài đặt hay quản lý máy chủ riêng biệt.
+
+Hỗ trợ Preview Deployment: Đây là tính năng cực kỳ hữu ích. Với mỗi thay đổi (pull request) bạn gửi lên GitHub, Vercel sẽ tạo ra một đường link tạm thời. Điều này cho phép bạn hoặc đồng nghiệp xem thử thay đổi đó trông như thế nào trên thực tế trước khi gộp (merge) vào phiên bản chính thức.
+
+Chứng chỉ SSL miễn phí: Vercel tự động cấu hình HTTPS cho mọi website bạn deploy, đảm bảo tính bảo mật mà không tốn công cài đặt.
+
+Tại sao Vercel lại phổ biến?
+Dễ sử dụng: Quy trình deploy thường chỉ mất vài cú nhấp chuột.
+
+Hệ sinh thái: Vercel là "cha đẻ" của Next.js (framework phổ biến nhất cho React hiện nay), nên sự tương thích giữa công nghệ này và nền tảng Vercel là hoàn hảo.
+
+Miễn phí cho cá nhân: Đối với các dự án cá nhân hoặc dự án mã nguồn mở, Vercel cung cấp gói miễn phí (Hobby) rất hào phóng, đủ để chạy tốt các trang web cá nhân, blog hoặc sản phẩm demo.
+
+So sánh nhanh với cách truyền thống
+Cách truyền thống: Bạn phải mua VPS, tự cài đặt hệ điều hành, cài đặt Web Server (Nginx, Apache), cấu hình SSL, tự thiết lập quy trình CI/CD phức tạp.
+
+Với Vercel: Bạn chỉ cần tập trung vào việc viết code. Vercel lo toàn bộ phần hạ tầng, quản lý server và scaling (tự động mở rộng khi có nhiều người truy cập).
+
+#---

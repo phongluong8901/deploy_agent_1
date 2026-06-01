@@ -1,0 +1,46 @@
+#--- clone
+mkdir agent_egineer_2
+cd agent_egineer_2
+
+git clone https://github.com/ed-donner/production.git
+
+cd production
+
+#--- docs
+
+
+#--- install
+
+
+#--- run
+
+-- week1
+cd week1
+cd proj_1
+npm install -g vercel
+vercel login
+vercel .
+
+
+  Set up "~/agent_egineer_2/production/week1/proj_1"
+? Which team? phongluong8901's projects
+? Link to existing project? yes
+> No existing projects found under phongluong8901s-projects. Creating new project.
+? Name? proj-1
+? In which directory is your code located? ./
+? Do you want to change additional project settings? no
+
+vercel --force
+
+#--- git
+git checkout b 01/06/2026
+git branch
+git push origin -u 01/06/2026
+
+
+#--- console vercel
+https://vercel.com/phongluong8901s-projects/proj-1/5oxiBAtsc33TavxcA1LZngT9JeHu
+
+#--- link
+
+https://proj-1-ro7mbqin1-phongluong8901s-projects.vercel.app

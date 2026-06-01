@@ -1,0 +1,26 @@
+#--- install
+npx create-next-app saas --ts --eslint --tailwind --no-src-dir --no-app
+
+#--- run
+
+cd week1
+cd proj_2
+
+cd saas
+
+-- local
+- BE
+pip install -r requirements.txt
+uvicorn be.index:app --reload
+
++ link: http://127.0.0.1:8000/api
+
+- FE
+npm run dev
+
++ link: http://localhost:3000/
+
+-- cloud vercel
+
+vercel login
+vercel --prod

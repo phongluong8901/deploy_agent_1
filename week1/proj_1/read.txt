@@ -1,0 +1,40 @@
+#--- install
+npm install -g vercel
+
+#--- run
+
+cd week1
+cd proj_1
+
+-- local
+pip install -r requirements.txt
+uvicorn instant:app --reload
+
+-- local wsl
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn instant:app --reload
+
+-- cloud vercel
+vercel login
+vercel .
+
+
+  Set up "~/agent_egineer_2/production/week1/proj_1"
+? Which team? phongluong8901's projects
+? Link to existing project? yes
+> No existing projects found under phongluong8901s-projects. Creating new project.
+? Name? proj-1
+? In which directory is your code located? ./
+? Do you want to change additional project settings? no
+
+vercel --force
+
+-- vercel --prod
+Tại sao lệnh này là đủ?
+Đẩy code mới: Vercel sẽ gửi code hiện tại (đã được bạn cấu hình dùng google-genai và os.environ) lên server.
+Cài đặt dependencies: Nó tự động đọc file requirements.txt và cài đặt đúng các thư viện bạn đã liệt kê.
+Liên kết Secret: Vercel sẽ tự động nạp các Environment Variables (API Key) bạn đã lưu trong Dashboard vào môi trường chạy của ứng dụng.
+
+
