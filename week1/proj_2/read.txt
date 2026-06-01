@@ -4,6 +4,9 @@ npx create-next-app saas --ts --eslint --tailwind --no-src-dir --no-app
 npm install react-markdown remark-gfm remark-breaks
 
 npm install @clerk/nextjs@6.39.0 @microsoft/fetch-event-source
+
+npm install react-datepicker
+npm install --save-dev @types/react-datepicker
 #--- run
 
 cd week1
