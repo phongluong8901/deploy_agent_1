@@ -3,8 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from dotenv import load_dotenv
-from typing import Optional
+from typing import Optional, List, Dict
+import json
 import uuid
+from pathlib import Path
 import google.generativeai as genai
 
 # Load environment variables
@@ -22,16 +24,45 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Cấu hình Google Gemini
+# Initialize Gemini
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+# Sử dụng gemini-1.5-flash để phản hồi nhanh
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-# Load personality details
+# Memory directory
+MEMORY_DIR = Path("../memory")
+MEMORY_DIR.mkdir(exist_ok=True)
+
 def load_personality():
     with open("me.txt", "r", encoding="utf-8") as f:
         return f.read().strip()
 
 PERSONALITY = load_personality()
+
+# Chuyển đổi định dạng role từ OpenAI (system/user/assistant) sang Gemini (user/model)
+def convert_history_to_gemini(conversation: List[Dict]):
+    gemini_history = []
+    # Thêm personality làm lời dẫn đầu tiên
+    gemini_history.append({"role": "user", "parts": [f"System Instructions: {PERSONALITY}"]})
+    gemini_history.append({"role": "model", "parts": ["Understood. I am your Digital Twin."]})
+    
+    for msg in conversation:
+        role = "user" if msg["role"] == "user" else "model"
+        gemini_history.append({"role": role, "parts": [msg["content"]]})
+    return gemini_history
+
+# Memory functions (giữ nguyên)
+def load_conversation(session_id: str) -> List[Dict]:
+    file_path = MEMORY_DIR / f"{session_id}.json"
+    if file_path.exists():
+        with open(file_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+def save_conversation(session_id: str, messages: List[Dict]):
+    file_path = MEMORY_DIR / f"{session_id}.json"
+    with open(file_path, "w", encoding="utf-8") as f:
+        json.dump(messages, f, indent=2, ensure_ascii=False)
 
 class ChatRequest(BaseModel):
     message: str
@@ -45,24 +76,24 @@ class ChatResponse(BaseModel):
 async def chat(request: ChatRequest):
     try:
         session_id = request.session_id or str(uuid.uuid4())
-
-        # Gemini sử dụng hệ thống "chat session" (history)
-        # Ở đây ta khởi tạo history với system prompt (personality)
-        chat_session = model.start_chat(history=[
-            {"role": "user", "parts": [f"System instructions: {PERSONALITY}"]},
-            {"role": "model", "parts": ["Understood. I will act according to these instructions."]}
-        ])
-
-        # Gửi tin nhắn
+        conversation = load_conversation(session_id)
+        
+        # Tạo session chat với lịch sử cũ
+        history = convert_history_to_gemini(conversation)
+        chat_session = model.start_chat(history=history)
+        
+        # Gửi tin nhắn mới
         response = chat_session.send_message(request.message)
-
-        return ChatResponse(
-            response=response.text, 
-            session_id=session_id
-        )
-
+        assistant_response = response.text
+        
+        # Cập nhật lịch sử
+        conversation.append({"role": "user", "content": request.message})
+        conversation.append({"role": "assistant", "content": assistant_response})
+        save_conversation(session_id, conversation)
+        
+        return ChatResponse(response=assistant_response, session_id=session_id)
     except Exception as e:
-        # print(f"LỖI CHI TIẾT: {e}")
+        print(f"Lỗi hệ thống: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
