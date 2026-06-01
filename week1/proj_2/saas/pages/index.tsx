@@ -1,47 +1,105 @@
 "use client"
 
-import { useEffect, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkBreaks from 'remark-breaks';
+import Link from 'next/link';
+import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 export default function Home() {
-  const [idea, setIdea] = useState<string>('Đang kết nối tới Gemini...');
-
-  useEffect(() => {
-    // const eventSource = new EventSource('http://127.0.0.1:8000/api-be');
-    const eventSource = new EventSource('/api-be');
-    let buffer = "";
-
-    eventSource.onmessage = (event) => {
-      buffer += event.data;
-      setIdea(buffer);
-    };
-
-    eventSource.onerror = () => {
-      // Nếu có lỗi, thông báo cho người dùng thay vì chỉ đóng kết nối im lặng
-      if (buffer === 'Đang kết nối tới Gemini...') {
-        setIdea('❌ Lỗi: Không thể kết nối tới server. Vui lòng kiểm tra lại API Key hoặc mạng.');
-      }
-      eventSource.close();
-    };
-
-    return () => eventSource.close();
-  }, []);
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-blue-100 flex items-center justify-center p-6">
-      <div className="bg-white/80 backdrop-blur-xl border border-white/50 shadow-2xl rounded-3xl p-8 max-w-2xl w-full">
-        <h1 className="text-3xl font-extrabold mb-8 text-center bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
-          Business Idea Generator
-        </h1>
+    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      <div className="container mx-auto px-4 py-12">
+        {/* Navigation */}
+        <nav className="flex justify-between items-center mb-12">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+            MediNotes Pro
+          </h1>
+          <div>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                  Sign In
+                </button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/product"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors"
+                >
+                  Go to App
+                </Link>
+                <UserButton showName={true} />
+              </div>
+            </SignedIn>
+          </div>
+        </nav>
 
-        <div className="markdown-content p-6 bg-white/50 rounded-2xl text-left text-gray-800 leading-relaxed min-h-[200px] border border-gray-100 shadow-inner">
-          <ReactMarkdown remarkPlugins={[remarkGfm, remarkBreaks]}>
-            {idea}
-          </ReactMarkdown>
+        {/* Hero Section */}
+        <div className="text-center py-16">
+          <h2 className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-6">
+            Transform Your
+            <br />
+            Consultation Notes
+          </h2>
+          <p className="text-xl text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
+            AI-powered assistant that generates professional summaries, action items, and patient communications from your consultation notes
+          </p>
+
+          {/* Features Grid */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-12">
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+              <div className="relative bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
+                <div className="text-3xl mb-4">📋</div>
+                <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Professional Summaries</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  Generate comprehensive medical record summaries from your notes
+                </p>
+              </div>
+            </div>
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-green-600 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+              <div className="relative bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
+                <div className="text-3xl mb-4">✅</div>
+                <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Action Items</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  Clear next steps and follow-up actions for every consultation
+                </p>
+              </div>
+            </div>
+            <div className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl blur opacity-25 group-hover:opacity-40 transition duration-300"></div>
+              <div className="relative bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 backdrop-blur-sm">
+                <div className="text-3xl mb-4">📧</div>
+                <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Patient Emails</h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  Draft clear, patient-friendly email communications automatically
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <SignedOut>
+            <SignInButton mode="modal">
+              <button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all transform hover:scale-105">
+                Start Free Trial
+              </button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <Link href="/product">
+              <button className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-xl text-lg transition-all transform hover:scale-105">
+                Open Consultation Assistant
+              </button>
+            </Link>
+          </SignedIn>
+        </div>
+
+        {/* Trust Indicators */}
+        <div className="text-center text-sm text-gray-500 dark:text-gray-400">
+          <p>For demonstration purposes only</p>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
