@@ -45,6 +45,16 @@ git checkout b 01/06/2026
 git branch
 git push origin -u 01/06/2026
 
+#--- gemini
+from google import genai
+
+# Gọi Gemini với streaming
+    response = client.models.generate_content_stream(
+        model="gemini-2.5-flash",
+        contents=full_prompt,
+    )
+
+
 
 #--- link tech
 https://vercel.com/phongluong8901s-projects

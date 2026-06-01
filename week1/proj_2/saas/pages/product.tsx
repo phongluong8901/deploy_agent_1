@@ -36,7 +36,7 @@ function ConsultationForm() {
         const controller = new AbortController();
         let buffer = '';
 
-        await fetchEventSource('/api-be', {
+        await fetchEventSource('/api-be/consultation', {
             signal: controller.signal,
             method: 'POST',
             headers: {
