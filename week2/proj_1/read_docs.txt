@@ -72,7 +72,7 @@ Tích hợp sâu (Serverless): Vì là dịch vụ serverless, bạn không cầ
 
 Pay-as-you-go: Bạn chỉ trả tiền cho những gì bạn sử dụng (ví dụ: số lượng token bạn gửi vào và nhận lại), không tốn phí duy trì hàng tháng nếu không có người dùng.
 
-Ví dụ về cách Bedrock hoạt động trong ứng dụng của bạn:
+Bedrock hoạt động trong ứng dụng của bạn:
 Bước 1 (User): Người dùng nhắn tin vào website Digital Twin của bạn.
 
 Bước 2 (API Gateway/Lambda): Server của bạn nhận tin nhắn đó.
@@ -80,3 +80,27 @@ Bước 2 (API Gateway/Lambda): Server của bạn nhận tin nhắn đó.
 Bước 3 (Bedrock): Code của bạn gửi tin nhắn đó tới Bedrock. Bạn chỉ định rõ: "Hãy dùng mô hình global.amazon.nova-lite-v1:0 để xử lý tin nhắn này".
 
 Bước 4 (Phản hồi): Bedrock trả về câu trả lời, và bạn hiển thị nó lên giao diện cho người dùng.
+
+
+#--- Terraform
+rong lĩnh vực triển khai (deployment), Terraform là một công cụ Infrastructure as Code (IaC) – nghĩa là "Cơ sở hạ tầng dưới dạng mã nguồn".
+
+Nói một cách đơn giản nhất: Thay vì bạn phải vào trang web AWS, bấm chuột thủ công để tạo S3, Lambda, API Gateway... (rất mất thời gian và dễ sai sót), bạn sẽ viết các file cấu hình mô tả hệ thống bạn muốn, và Terraform sẽ thay bạn "bấm chuột" để tạo ra toàn bộ hệ thống đó.
+
+1. Tại sao Terraform lại quan trọng trong việc Deploy?
+Tính tự động hóa (Automation): Bạn chỉ cần chạy lệnh terraform apply, mọi tài nguyên trên AWS sẽ được tạo ra chính xác như những gì bạn đã mô tả trong file.
+
+Tính nhất quán (Consistency): Nếu bạn cần tạo lại hệ thống y hệt (ví dụ cho môi trường Dev, Staging và Production), bạn chỉ cần dùng chung bộ code Terraform đó. Không bao giờ lo việc "quên" cấu hình một mục nào đó.
+
+Kiểm soát phiên bản (Version Control): Vì cơ sở hạ tầng được viết thành file code, bạn có thể lưu nó lên GitHub. Bạn sẽ biết được ai đã thay đổi hệ thống, thay đổi cái gì, vào lúc nào.
+
+Khả năng xóa/hủy (Clean-up): Khi không dùng hệ thống nữa, bạn chỉ cần chạy terraform destroy. Nó sẽ xóa sạch tất cả những gì nó đã tạo ra, giúp bạn tránh bị AWS "trừ tiền" oan vì quên tắt tài nguyên.
+
+2. Cách Terraform hoạt động
+Terraform hoạt động theo 3 bước chính:
+
+Viết mã (Write): Bạn viết các file kết thúc bằng đuôi .tf. Ví dụ: bạn viết một đoạn code để yêu cầu AWS tạo 1 cái S3 bucket.
+
+Lập kế hoạch (Plan): Bạn chạy lệnh terraform plan. Terraform sẽ so sánh code của bạn với thực tế trên AWS và liệt kê ra: "Tôi sẽ tạo mới cái này, sửa cái kia, và xóa cái nọ".
+
+Áp dụng (Apply): Bạn chạy lệnh terraform apply. Terraform sẽ gửi yêu cầu tới AWS để thực hiện các thay đổi đó.

@@ -44,6 +44,8 @@ export default function Twin() {
             const response = await fetch('http://localhost:8000/chat', {
                 // deploy aws
                 // const response = await fetch('https://YOUR-API-ID.execute-api.us-east-1.amazonaws.com/chat', {
+                //deploy terraform
+                // const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/chat`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -6,6 +6,64 @@ npx create-next-app@latest frontend --typescript --tailwind --app --no-src-dir
 curl -LsSf https://astral.sh/uv/install.sh | sh
 uv --version
 
+--
+Để cài đặt Terraform trên WSL (Ubuntu), bạn nên cài qua bộ quản lý gói chính thức của HashiCorp để đảm bảo luôn cập nhật được bản mới nhất.
+
+Hãy mở terminal Ubuntu lên và thực hiện chính xác các lệnh sau:
+
+Bước 1: Cài đặt các công cụ hỗ trợ
+Đầu tiên, hãy đảm bảo hệ thống của bạn có đủ các công cụ để tải và cài đặt:
+
+Bash
+
+
+sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
+Bước 2: Thêm kho lưu trữ (Repository) của HashiCorp
+Terraform được duy trì bởi HashiCorp, nên chúng ta cần thêm "chìa khóa" của họ vào hệ thống để tải phần mềm:
+
+Thêm GPG Key:
+
+Bash
+
+
+wget -O- https://apt.releases.hashicorp.com/gpg | \
+gpg --dearmor | \
+sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+Xác minh Key (đảm bảo đúng bản quyền):
+
+Bash
+
+
+gpg --no-default-keyring \
+--keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
+--fingerprint
+(Bạn sẽ thấy một đoạn mã fingerprint hiện ra).
+
+Thêm kho lưu trữ vào danh sách của Ubuntu:
+
+Bash
+
+
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+sudo tee /etc/apt/sources.list.d/hashicorp.list
+Bước 3: Cài đặt Terraform
+Sau khi đã thêm kho lưu trữ, bạn chỉ việc cài đặt như các phần mềm thông thường:
+
+Bash
+
+
+sudo apt-get update
+sudo apt-get install terraform
+Bước 4: Kiểm tra cài đặt
+Sau khi chạy xong, hãy kiểm tra xem hệ thống đã nhận Terraform chưa bằng lệnh:
+
+Bash
+
+
+terraform -version
+Nếu nó trả về phiên bản (ví dụ: Terraform v1.x.x), chúc mừng bạn, bạn đã cài đặt thành công!
+
 #--- run
 
 --
@@ -34,4 +92,21 @@ uv run deploy.py
 
 #--- git
 
-#---
+#--- terminal
+chmod +x scripts/deploy.sh
+chmod +x scripts/destroy.sh
+
+#--- deploy
+cd terraform
+terraform init
+
+./scripts/deploy.sh dev
+
+# Destroy dev environment
+./scripts/destroy.sh dev
+
+# Destroy test environment
+./scripts/destroy.sh test
+
+# Destroy prod environment
+./scripts/destroy.sh prod
