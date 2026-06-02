@@ -110,3 +110,16 @@ terraform init
 
 # Destroy prod environment
 ./scripts/destroy.sh prod
+
+#--- ửokflow
+# Add all changes (workflows, backend.tf, updated scripts)
+git add .
+
+# See what's being committed
+git status
+
+# Commit
+git commit -m "Add CI/CD with GitHub Actions, S3 backend, and updated scripts"
+
+# Push to GitHub
+git push

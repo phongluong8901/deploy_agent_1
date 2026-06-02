@@ -1,0 +1,23 @@
+#--- Semgrep
+Semgrep (viết tắt của Semantic grep) là một công cụ phân tích mã nguồn tĩnh (Static Analysis) mã nguồn mở, cực kỳ phổ biến trong DevOps hiện nay.
+
+Nếu bạn coi DevOps là việc xây dựng dây chuyền sản xuất phần mềm (CI/CD), thì Semgrep chính là "người kiểm tra chất lượng" (Quality Inspector) siêu tốc đứng ở cửa ra vào, chuyên soi lỗi bảo mật và lỗi logic trong code trước khi nó được triển khai lên server.
+
+1. Semgrep làm gì?
+Thông thường, các công cụ quét bảo mật (SAST) rất chậm và phức tạp. Semgrep khác biệt vì:
+
+Tốc độ cực nhanh: Nó chạy trực tiếp trên máy tính của developer hoặc trong quy trình CI/CD.
+
+Ngôn ngữ linh hoạt: Nó hỗ trợ rất nhiều ngôn ngữ (Python, JavaScript, Go, Java, v.v.).
+
+Dễ viết quy tắc (Custom Rules): Bạn có thể tự viết các "luật" bằng chính cú pháp của ngôn ngữ lập trình đó để bắt các lỗi đặc thù trong dự án của mình.
+
+2. Tại sao Semgrep lại quan trọng trong DevOps?
+Trong mô hình DevSecOps (đưa bảo mật vào DevOps), Semgrep đóng vai trò cốt lõi:
+
+Shift Left (Dịch chuyển sang trái): Thay vì đợi đến khi hệ thống đã deploy xong mới quét lỗi, Semgrep giúp phát hiện lỗi bảo mật ngay khi lập trình viên vừa viết code xong.
+
+Tích hợp CI/CD: Semgrep có thể tự động chặn (block) việc merge code nếu nó phát hiện các lỗ hổng nghiêm trọng (ví dụ: Hardcoded API Key, SQL Injection, hoặc dùng thư viện bị lỗi thời).
+
+Code review tự động: Nó giống như một "đồng nghiệp ảo" luôn túc trực, nhắc nhở bạn: "Này, đoạn code này đang dùng hàm nguy hiểm, hãy đổi sang hàm khác đi".
+
