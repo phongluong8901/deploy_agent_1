@@ -47,3 +47,36 @@ Bảo mật: Luôn sử dụng IAM Roles với quyền tối thiểu (Least Priv
 Quản lý chi phí: Theo dõi số lượng token tiêu thụ của LLM (nếu dùng API như OpenAI hoặc Amazon Bedrock) và tối ưu hóa thời gian chạy của Lambda để tránh chi phí ngoài ý muốn.
 
 Kiểm thử: Luôn có môi trường Staging tách biệt hoàn toàn với Production để kiểm tra độ chính xác của ngữ cảnh trước khi cập nhật dữ liệu mới cho người dùng cuối.
+
+#--- Bedrock
+Amazon Bedrock là một dịch vụ được quản lý toàn diện (fully managed service) của AWS, cho phép bạn truy cập vào các mô hình trí tuệ nhân tạo (AI) mạnh mẽ nhất từ các công ty hàng đầu thông qua một API duy nhất.
+
+Bạn có thể hình dung Bedrock giống như một "siêu thị AI" nằm ngay trong hạ tầng đám mây AWS của bạn.
+
+Tại sao Bedrock lại quan trọng?
+Thay vì phải tự xây dựng các mô hình AI (rất tốn kém và khó khăn), hoặc phải kết nối với các dịch vụ bên ngoài (như OpenAI) qua Internet công cộng, Bedrock cung cấp cho bạn:
+
+Sự lựa chọn đa dạng (Model Selection): Bạn có thể chọn mô hình từ các "ông lớn" như:
+
+Amazon: Dòng mô hình Nova (Micro, Lite, Pro) - tối ưu cho hiệu năng và chi phí.
+
+Anthropic: Dòng Claude (rất mạnh về suy luận và viết lách).
+
+Meta: Dòng Llama (mô hình mã nguồn mở phổ biến nhất).
+
+Mistral, Stability AI, v.v.
+
+Bảo mật cấp doanh nghiệp: Dữ liệu bạn gửi đi để AI xử lý sẽ không được dùng để huấn luyện mô hình công cộng của bên thứ ba. Nó nằm hoàn toàn trong phạm vi quản lý của AWS (tuân thủ các tiêu chuẩn như SOC, HIPAA).
+
+Tích hợp sâu (Serverless): Vì là dịch vụ serverless, bạn không cần cài đặt máy chủ hay quản lý hạ tầng. Khi bạn cần gọi AI, bạn chỉ cần gọi API của Bedrock, AWS sẽ tự xử lý mọi thứ và trả về kết quả ngay trong vùng mạng (region) của bạn.
+
+Pay-as-you-go: Bạn chỉ trả tiền cho những gì bạn sử dụng (ví dụ: số lượng token bạn gửi vào và nhận lại), không tốn phí duy trì hàng tháng nếu không có người dùng.
+
+Ví dụ về cách Bedrock hoạt động trong ứng dụng của bạn:
+Bước 1 (User): Người dùng nhắn tin vào website Digital Twin của bạn.
+
+Bước 2 (API Gateway/Lambda): Server của bạn nhận tin nhắn đó.
+
+Bước 3 (Bedrock): Code của bạn gửi tin nhắn đó tới Bedrock. Bạn chỉ định rõ: "Hãy dùng mô hình global.amazon.nova-lite-v1:0 để xử lý tin nhắn này".
+
+Bước 4 (Phản hồi): Bedrock trả về câu trả lời, và bạn hiển thị nó lên giao diện cho người dùng.

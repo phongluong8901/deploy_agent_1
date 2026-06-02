@@ -28,6 +28,10 @@ uv run uvicorn server:app --reload
 cd frontend
 npm run dev
 
+-- run deploy
+cd backend
+uv run deploy.py
+
 #--- git
 
 #---
